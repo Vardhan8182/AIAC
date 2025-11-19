@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Student Marks Dashboard</title>
+    <style>
+        :root{
+            --bg:#f4f7fb;
+            --card:#ffffff;
+            --accent:#3b82f6;
+            --muted:#6b7280;
+            --danger:#ef4444;
+            --success:#10b981;
+            --radius:10px;
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+
+        body{
+            margin:0;
+            min-height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:linear-gradient(180deg,#e9f0ff 0%,var(--bg) 100%);
+            color:#111827;
+            padding:32px;
+        }
+
+        .container{
+            width:100%;
+            max-width:880px;
+            background:var(--card);
+            border-radius:var(--radius);
+            box-shadow:0 8px 30px rgba(15,23,42,0.08);
+            padding:20px;
+            display:grid;
+            grid-template-columns: 1fr 320px;
+            gap:20px;
+        }
+
+        header{
+            grid-column:1/-1;
+            padding-bottom:6px;
+            border-bottom:1px solid #eef2ff;
+            margin-bottom:12px;
+        }
+
+        h1{margin:0;font-size:1.25rem;}
+        p.sub{margin:6px 0 0;color:var(--muted);font-size:0.95rem}
+
+        .form{
+            padding:8px;
+        }
+
+        .field{
+            display:flex;
+            gap:10px;
+            align-items:center;
+            margin-bottom:10px;
+        }
+
+        .field label{
+            width:110px;
+            font-size:0.95rem;
+            color:var(--muted);
+        }
+
+        .field input[type="text"],
+        .field input[type="number"]{
+            flex:1;
+            padding:8px 10px;
+            border:1px solid #e6eef8;
+            border-radius:8px;
+            font-size:0.95rem;
+            outline:none;
+            transition:box-shadow .12s;
+            background: #fbfdff;
+        }
+
+        .field input[type="number"]::-webkit-outer-spin-button,
+        .field input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .controls{
+            display:flex;
+            gap:10px;
+            margin-top:12px;
+        }
+
+        button{
+            padding:10px 14px;
+            border-radius:8px;
+            border:0;
+            cursor:pointer;
+            font-weight:600;
+            color:white;
+        }
+
+        .btn-primary{ background:var(--accent); }
+        .btn-secondary{ background:#64748b; }
+
+        .panel{
+            background:linear-gradient(180deg,#ffffff,#fbfdff);
+            border:1px solid #eef4ff;
+            padding:14px;
+            border-radius:10px;
+            box-shadow:inset 0 1px 0 rgba(255,255,255,0.6);
+        }
+
+        .result{
+            display:flex;
+            flex-direction:column;
+            gap:10px;
+            align-items:stretch;
+        }
+
+        .stat{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:8px;
+            border-radius:8px;
+            background:#fbfdff;
+            border:1px solid #f0f6ff;
+        }
+
+        .progress{
+            height:12px;
+            background:#eef2ff;
+            border-radius:999px;
+            overflow:hidden;
+        }
+
+        .progress > i{
+            display:block;
+            height:100%;
+            transition:width .5s ease;
+            background:linear-gradient(90deg,var(--accent),#06b6d4);
+        }
+
+        .grade{
+            font-weight:700;
+            padding:8px 12px;
+            border-radius:8px;
+            color:white;
+            display:inline-block;
+        }
+
+        .grade.Aplus{ background:#0ea5a4; } /* teal */
+        .grade.A{ background:#10b981; } /* green */
+        .grade.B{ background:#f59e0b; } /* amber */
+        .grade.C{ background:#f97316; } /* orange */
+        .grade.D{ background:#ef4444; } /* red */
+        .grade.F{ background:#6b7280; } /* muted */
+
+        .note{font-size:0.85rem;color:var(--muted)}
+        .error{color:var(--danger);font-weight:600;font-size:0.9rem}
+        @media (max-width:860px){
+            .container{grid-template-columns:1fr; padding:16px;}
+        }
+    </style>
+</head>
+<body>
+    <div class="container" role="main">
+        <header>
+            <h1>Student Marks Dashboard</h1>
+            <p class="sub">Enter marks (0-100). Click Calculate to see total, percentage and grade.</p>
+        </header>
+
+        <form id="marksForm" class="form panel" autocomplete="off" novalidate>
+            <div class="field">
+                <label for="studentName">Student</label>
+                <input id="studentName" name="studentName" type="text" placeholder="Full name (optional)" />
+            </div>
+
+            <div class="field">
+                <label for="m1">Maths</label>
+                <input id="m1" name="m1" type="number" min="0" max="100" placeholder="0-100" required />
+            </div>
+            <div class="field">
+                <label for="m2">Physics</label>
+                <input id="m2" name="m2" type="number" min="0" max="100" placeholder="0-100" required />
+            </div>
+            <div class="field">
+                <label for="m3">Chemistry</label>
+                <input id="m3" name="m3" type="number" min="0" max="100" placeholder="0-100" required />
+            </div>
+            <div class="field">
+                <label for="m4">English</label>
+                <input id="m4" name="m4" type="number" min="0" max="100" placeholder="0-100" required />
+            </div>
+            <div class="field">
+                <label for="m5">Computer</label>
+                <input id="m5" name="m5" type="number" min="0" max="100" placeholder="0-100" required />
+            </div>
+
+            <div class="controls">
+                <button type="submit" class="btn-primary">Calculate</button>
+                <button type="button" id="resetBtn" class="btn-secondary">Reset</button>
+                <div style="flex:1"></div>
+            </div>
+
+            <p id="error" class="note error" style="display:none;margin-top:8px;"></p>
+        </form>
+
+        <aside class="panel result" aria-live="polite">
+            <div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                    <div>
+                        <strong id="outName">Student</strong>
+                        <div class="note" id="outSubjects">Subjects: 5</div>
+                    </div>
+                    <div id="outPercentage" style="font-size:1.1rem;font-weight:700">--%</div>
+                </div>
+
+                <div class="stat">
+                    <div>Total Marks</div>
+                    <div id="outTotal">-- / 500</div>
+                </div>
+
+                <div style="margin-top:8px">
+                    <div class="note" style="margin-bottom:6px">Percentage</div>
+                    <div class="progress" aria-hidden="true">
+                        <i id="progressBar" style="width:0%"></i>
+                    </div>
+                </div>
+
+                <div style="margin-top:12px;display:flex;align-items:center;gap:12px">
+                    <div>
+                        <div class="note">Grade</div>
+                        <div id="outGrade" class="grade F" style="margin-top:6px">--</div>
+                    </div>
+                    <div style="flex:1">
+                        <div class="note">Remarks</div>
+                        <div id="outRemark" style="margin-top:6px">No data</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:auto">
+                <p class="note">This dashboard calculates total and grade from entered marks.</p>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        (function(){
+            const form = document.getElementById('marksForm');
+            const resetBtn = document.getElementById('resetBtn');
+            const errorEl = document.getElementById('error');
+
+            const outName = document.getElementById('outName');
+            const outTotal = document.getElementById('outTotal');
+            const outPercentage = document.getElementById('outPercentage');
+            const outGrade = document.getElementById('outGrade');
+            const outRemark = document.getElementById('outRemark');
+            const progressBar = document.getElementById('progressBar');
+
+            function clamp(n){ return Math.max(0, Math.min(100, n)); }
+
+            function computeGrade(percentage){
+                if (percentage >= 90) return {grade:'A+', className:'Aplus', remark:'Outstanding'};
+                if (percentage >= 80) return {grade:'A', className:'A', remark:'Excellent'};
+                if (percentage >= 70) return {grade:'B', className:'B', remark:'Very Good'};
+                if (percentage >= 60) return {grade:'C', className:'C', remark:'Good'};
+                if (percentage >= 50) return {grade:'D', className:'D', remark:'Needs Improvement'};
+                return {grade:'F', className:'F', remark:'Fail'};
+            }
+
+            function showError(msg){
+                errorEl.textContent = msg;
+                errorEl.style.display = msg ? 'block' : 'none';
+            }
+
+            form.addEventListener('submit', function(ev){
+                ev.preventDefault();
+                showError('');
+
+                const name = (document.getElementById('studentName').value || 'Student').trim();
+                const ids = ['m1','m2','m3','m4','m5'];
+                const marks = [];
+                for (const id of ids){
+                    const el = document.getElementById(id);
+                    const v = el.value.trim();
+                    if (v === ''){
+                        showError('Please enter all marks.');
+                        return;
+                    }
+                    const num = Number(v);
+                    if (!Number.isFinite(num) || isNaN(num)){
+                        showError('Please enter valid numeric marks.');
+                        return;
+                    }
+                    if (num < 0 || num > 100){
+                        showError('Marks must be between 0 and 100.');
+                        return;
+                    }
+                    marks.push(num);
+                }
+
+                const total = marks.reduce((a,b)=>a+b,0);
+                const maxTotal = marks.length * 100;
+                const percent = (total / maxTotal) * 100;
+                const rounded = Math.round(percent * 10) / 10; // one decimal
+
+                const g = computeGrade(rounded);
+
+                // update UI
+                outName.textContent = name || 'Student';
+                outTotal.textContent = `${total} / ${maxTotal}`;
+                outPercentage.textContent = `${rounded}%`;
+                progressBar.style.width = clamp(rounded) + '%';
+                outGrade.textContent = g.grade;
+                outGrade.className = 'grade ' + g.className;
+                outRemark.textContent = g.remark;
+            });
+
+            resetBtn.addEventListener('click', function(){
+                form.reset();
+                showError('');
+                outName.textContent = 'Student';
+                outTotal.textContent = '-- / 500';
+                outPercentage.textContent = '--%';
+                progressBar.style.width = '0%';
+                outGrade.textContent = '--';
+                outGrade.className = 'grade F';
+                outRemark.textContent = 'No data';
+            });
+
+            // Optional: allow Enter in any input to compute
+            const inputs = form.querySelectorAll('input');
+            inputs.forEach(i=>i.addEventListener('keydown', function(e){
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    form.dispatchEvent(new Event('submit', {cancelable:true}));
+                }
+            }));
+        })();
+    </script>
+</body>
+</html></div>
